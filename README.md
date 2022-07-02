@@ -1,5 +1,5 @@
 # Fast Barnes Interpolation
-This repository provides a Java implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper.
+This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper.
 
 Barnes interpolation is a method that is widely used in geospatial sciences like meteorology to remodel data values recorded at irregularly distributed points into a representative analytical field.
 It is defined as
@@ -17,7 +17,6 @@ As pointed out in the paper, for sufficiently large n (in general in the range f
 
 where &delta; is the Dirac impulse function and r(.) an elementary rectangular function of a specific length that depends on &sigma; and n.
 
-The class `ConvolBarnesInterpol` implements the basic convolutional algorithm as described in chapter 4, while `OptConvolBarnesInterpol` provides its optimized version treated in chapter 5.4.  
-The two classes `Main` and `MainS2` allow the computation of Barnes interpolation for various setups as also used in the paper.
-If the boolean variable `writeResultFile` is set to true, the resulting data is written to a file and can be subsequently visualized by the auxiliary Python program `Paper_Map` in the tools folder.
-The five `Measurement` classes perform the time measurements and were used to assemble the data shown in Table 1 to 5.
+The module `interpolation` implements the Barnes interpolation algorithms using the Euclidean distance metric, as described in chapter 4 and 5.4 of the paper.
+The Barnes interpolation algorithms that use spherical distance metric on the sphere S^2, as outlined in chapter 5.5, are implemented im module `interpolationS2`.
+The folder `scripts` provides Python programs that reproduce the figures and tables shown in the paper.
