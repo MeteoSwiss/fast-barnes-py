@@ -1,5 +1,5 @@
 # Fast Barnes Interpolation
-This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper.
+This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper ([preprint available at GMD](https://gmd.copernicus.org/preprints/gmd-2022-116/gmd-2022-116.pdf)).
 
 Barnes interpolation is a method that is widely used in geospatial sciences like meteorology to remodel data values recorded at irregularly distributed points into a representative analytical field.
 It is defined as
