@@ -26,10 +26,7 @@ from rmse import rmse
 import numpy as np
 import matplotlib.pyplot as plt
 
-import sys
-sys.path.append('..')
-
-import interpolation
+from fastbarnes import interpolation
 
 # the test parameters #########################################################
 
@@ -71,7 +68,7 @@ x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
 size = (int(37.5/step), int(75.0/step))
     
 # read sample data from file - stored as (lat, lon, val) tuple
-obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
 
 # the reference field is the accurate result from naive algorithm
 print()

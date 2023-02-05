@@ -23,7 +23,7 @@ import numpy as np
 
 from numba import njit
 
-import kdtree
+from fastbarnes.util import kdtree
 
 
 ###############################################################################

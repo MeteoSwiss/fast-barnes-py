@@ -3,3 +3,4 @@ scipy
 numba
 matplotlib
 basemap
+Pillow

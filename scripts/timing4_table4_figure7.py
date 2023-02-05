@@ -30,10 +30,7 @@ import matplotlib.pyplot as plt
 
 import time
 
-import sys
-sys.path.append('..')
-
-import interpolation
+from fastbarnes import interpolation
 
 
 # the test parameters #########################################################
@@ -82,7 +79,7 @@ x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
 size = (int(37.5/step), int(75.0/step))
     
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
 
 # the reference field is the accurate result from naive algorithm
 print()
@@ -119,7 +116,7 @@ for num_iter in num_iter_set:
             # here we go: invoke Barnes interpolation and take execution time
             start = time.perf_counter_ns()
             res_field = interpolation.barnes(obs_pts, values, sigma, x0, step, size,
-                method=method, num_iter=num_iter, min_weight=0.0002)
+                method=method, num_iter=num_iter)
             # execution time in seconds with accuracy of ms
             exec_time = ((time.perf_counter_ns() - start) // 1000000) / 1000.0
             

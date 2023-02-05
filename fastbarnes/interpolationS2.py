@@ -23,8 +23,8 @@ import numpy as np
 
 from numba import njit
 
-import interpolation
-import lambert_conformal
+from fastbarnes import interpolation
+from fastbarnes.util import lambert_conformal
 
 
 ###############################################################################

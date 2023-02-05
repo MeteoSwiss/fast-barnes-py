@@ -6,14 +6,16 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'convolution' Barnes interpolation algorithm and plots the resulting field
+Invokes the 'naive' Barnes interpolation algorithm and plots the resulting field
 as isoline visualization on a geography with a lon-lat coordinate system.
 
 NOTE
 ====
-The execution time of this program takes around 20 seconds.
+The execution time of this program takes around 5 minutes.
+You can reduce this time by decreasing the number of sample points to 872 or 218
+for instance.
 
-Created on Sat May 28 14:33:59 2022
+Created on Sat May 28 14:17:40 2022
 @author: Bruno Zürcher
 """
 
@@ -22,15 +24,12 @@ import plotmap
 
 import numpy as np
 
-import sys
-sys.path.append('..')
-
-import interpolation
+from fastbarnes import interpolation
 
 ###############################################################################
 
 # one of [ 'naive', 'radius', 'convolution', 'optimized_convolution' ]
-method = "convolution"
+method = "naive"
 
 # one of [ 0.25, 0.5, 1.0, 2.0, 4.0 ]
 sigma = 1.0
@@ -53,7 +52,7 @@ size = (int(37.5/step), int(75.0/step))
 
 
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
 
 
 # compute Barnes interpolation

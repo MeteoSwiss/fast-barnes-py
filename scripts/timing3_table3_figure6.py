@@ -30,10 +30,7 @@ import matplotlib
 
 import time
 
-import sys
-sys.path.append('..')
-
-import interpolation
+from fastbarnes import interpolation
 
 
 # the test parameters #########################################################
@@ -104,7 +101,7 @@ for sigma in sigma_set:
     print()
     
     # read sample data from file
-    obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+    obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
     
     # definition of grid
     step = 1.0 / resolution
@@ -124,7 +121,7 @@ for sigma in sigma_set:
             # here we go: invoke Barnes interpolation and take execution time
             start = time.perf_counter_ns()
             res_field = interpolation.barnes(obs_pts, values, sigma, x0, step, size,
-                method=method, num_iter=num_iter, min_weight=0.0002)
+                method=method, num_iter=num_iter)
             # execution time in seconds with accuracy of ms
             exec_time = ((time.perf_counter_ns() - start) // 1000000) / 1000.0
             

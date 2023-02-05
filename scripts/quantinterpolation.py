@@ -21,10 +21,7 @@ import numpy as np
 
 from numba import njit
 
-import sys
-sys.path.append('..')
-
-import interpolation
+from fastbarnes import interpolation
 
 ###############################################################################
 

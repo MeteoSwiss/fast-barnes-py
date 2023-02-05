@@ -24,10 +24,7 @@ import plotmap
 
 import numpy as np
 
-import sys
-sys.path.append('..')
-
-import interpolationS2
+from fastbarnes import interpolationS2
 
 ###############################################################################
 
@@ -59,7 +56,7 @@ lam_size = (int(44.0/step), int(64.0/step))
 
 
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' \
+obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' \
     + str(num_points) + '.csv')
 
 

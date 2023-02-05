@@ -31,10 +31,7 @@ from mpl_toolkits.basemap import Basemap
 
 import numpy as np
 
-import sys
-sys.path.append('..')
-
-import lambert_conformal
+from fastbarnes.util import lambert_conformal
 
 ###############################################################################
 

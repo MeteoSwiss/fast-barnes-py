@@ -16,11 +16,8 @@ Created on Sat Jun  4 17:29:50 2022
 import numpy as np
 import matplotlib.pyplot as plt
 
-import sys
-sys.path.append('..')
-
-import interpolationS2
-import lambert_conformal
+from fastbarnes import interpolationS2
+from fastbarnes.util import lambert_conformal
 
 # compute Lambert scale factors ###############################################
 
