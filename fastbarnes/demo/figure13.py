@@ -53,7 +53,7 @@ size = (int(37.5/step), int(75.0/step))
 
 
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
 
 
 # compute Barnes interpolation

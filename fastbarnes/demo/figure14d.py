@@ -9,7 +9,7 @@
 Computes the 'convolution' Barnes interpolation algorithm B with a constellation of
 QFF values over Iceland that trigger an artifact when plotted with an isoline
 visualization.
-The plot shows the situation, if no quantization takes place.
+The plot shows the situation, if a 6 bit quantization takes place.
 
 Created on Sun Jun  5 19:51:02 2022
 @author: Bruno Zürcher
@@ -36,7 +36,7 @@ resolution = 32.0
 num_iter = 4
 
 # the number of quantization bits: one of [ 0, 3, 6 ]
-quant_bits = 0
+quant_bits = 6
 
 ###############################################################################
 
@@ -47,7 +47,7 @@ size = (int(37.5/step), int(75.0/step))
 
 
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('../input/obs/Iceland_PressOFF_constellation.csv')
+obs_pts, obs_values = reader.read_csv_array('../../input/obs/Iceland_PressOFF_constellation.csv')
 
 
 # compute Barnes interpolation with special quantization implementation

@@ -19,7 +19,7 @@ import plotmap
 ###############################################################################
 
 # read observation data from file
-obs_pts, obs_values = reader.read_csv_array('../input/obs/Iceland_PressOFF_constellation.csv')
+obs_pts, obs_values = reader.read_csv_array('../../input/obs/Iceland_PressOFF_constellation.csv')
 
 # display station plot with values
 plotmap.plot_Iceland_station_map(obs_pts, obs_values)

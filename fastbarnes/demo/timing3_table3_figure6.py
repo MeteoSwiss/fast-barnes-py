@@ -7,17 +7,17 @@
 
 """
 Runs the 'naive', the 'radius' and the 'convolution' Barnes interpolation algorithms
-with a set of different number of sample points and takes the respective execution
-times. In order to receive more reliable results, the tests are executed several
-times in a row and the best measured time is taken as final result.
+with a set of different Gaussian width parameters sigma and takes the respective
+execution times. In order to receive more reliable results, the tests are executed
+several times in a row and the best measured time is taken as final result.
 The test results are printed as a summary table and plotted in form of a graph.
 
 NOTE - THIS IS A ANNOYINGLY SLOW TEST
 =====================================
-The execution time of this program takes around 40 minutes.
+The execution time of this program takes around 170 minutes.
 You can reduce this time by decreasing the resolution to 16.0 or 8.0 for instance.
 
-Created on Sun May 29 17:01:51 2022
+Created on Sat Jun 11 22:13:10 2022
 @author: Bruno Zürcher
 """
 
@@ -35,14 +35,14 @@ from fastbarnes import interpolation
 
 # the test parameters #########################################################
 
-# the different sample sizes
-num_points_set = [ 54, 218, 872, 3490 ]
+# one of: [ 54, 218, 872, 3490 ]
+num_points = 3490
 
 # one of: [ 4.0, 8.0, 16.0, 32.0, 64.0 ]
 resolution = 32.0
 
-# one of: [ 0.25, 0.5, 1.0, 2.0, 4.0 ]
-sigma = 1.0
+# the different Gaussian widths sigma
+sigma_set = [ 0.25, 0.5, 1.0, 2.0, 4.0 ]
 
 # one of: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 50 ]
 num_iter = 4
@@ -65,28 +65,43 @@ sleep_time = 30
 
 # do not modify after this point ##############################################
 
-print('Barnes Interpolation Time Measurements 1')
+def x_formatter(x, pos):
+    """ Formatter that draws the x-axis tick mark labels. """
+    if pos == None:
+        return ('%.2f' % x)
+    if pos < 5:
+        if x == 0.25:
+            return '0.25'
+        if x == 0.5:
+            return '0.5'
+        return str(int(x))
+    return ''
+
+
+###############################################################################
+
+print('Barnes Interpolation Time Measurements 3')
 print('****************************************')
 print()
-print('resolution: ', resolution)
-print('sigma:      ', sigma)
-print('iterations: ', num_iter)
+print('sample points: ', num_points)
+print('resolution:    ', resolution)
+print('iterations:    ', num_iter)
 
 
 # give some time to put computer at maximum rest (e.g. install lock screen)
 time.sleep(sleep_time)
 
 # array to store best measured times
-res_times = np.full((len(methods_set), len(num_points_set)), 9999999.9, dtype=np.float64)
+res_times = np.full((len(methods_set), len(sigma_set)), 9999999.9, dtype=np.float64)
 
 # take time measurements
-for num_points in num_points_set:
+for sigma in sigma_set:
     print()
-    print('Number of sample points:', num_points)
+    print('sigma:', sigma)
     print()
     
     # read sample data from file
-    obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+    obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
     
     # definition of grid
     step = 1.0 / resolution
@@ -112,11 +127,11 @@ for num_points in num_points_set:
             
             print('%-12s %8.3f s' % (method, exec_time), flush=True)
             
-            if exec_time < res_times[methods_set.index(method), num_points_set.index(num_points)]:
-                res_times[methods_set.index(method), num_points_set.index(num_points)] = exec_time
+            if exec_time < res_times[methods_set.index(method), sigma_set.index(sigma)]:
+                res_times[methods_set.index(method), sigma_set.index(sigma)] = exec_time
 
 
-# -- output table 1 -----------------------------------------------------------
+# -- output table 3 -----------------------------------------------------------
 print()
 print()
 print('Best measured times')
@@ -126,36 +141,36 @@ s = '%4s' % ' '
 for i in range(len(methods_set)): s = s + (' %8s' % method_short_names[i])
 print(s)
 
-for j in range(len(num_points_set)):
-    s = '%4d' % num_points_set[j]
+for j in range(len(sigma_set)):
+    s = '%4.2f' % sigma_set[j]
     for i in range(len(methods_set)): s = s + (' %8.3f' % res_times[i,j])
     print(s)
     
     
-# -- output figure 4 ----------------------------------------------------------
+# -- output figure 6 ----------------------------------------------------------
 fig, ax = plt.subplots(1, figsize=(7.2, 3.4), dpi=150)
 
 ax.set_xscale('log')
 ax.set_yscale('log')
 
-ax.set_xlim(40.0, 5000.0)
-ax.set_ylim(0.120, 480.0)
+ax.set_xlim(0.19, 5.25)
+ax.set_ylim(0.1666, 4500.0)
 
-ax.set_xticks(num_points_set+[100.0, 1000.0])
-ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax.set_xticks(sigma_set+[1.0])
+ax.get_xaxis().set_major_formatter(matplotlib.ticker.FuncFormatter(x_formatter))
 plt.xticks(rotation=-90)
 
-ax.set_yticks([1, 10, 100])
+ax.set_yticks([1, 10, 100, 1000])
 ax.get_yaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 plt.grid()
 
 # supress grid lines at x-data value positions, which are the first few ones in list
 lineList = ax.get_xgridlines()
-for k in range(len(num_points_set)):
+for k in range(len(sigma_set)):
     lineList[k].set_color('w')
     lineList[k].set_linewidth(0.0)
 
-ax.set_xlabel('Number of Sample Points')
+ax.set_xlabel('Width of Gaussian [°]')
 ax.set_ylabel('Execution Time [s]')
 
 # define colors
@@ -163,11 +178,11 @@ color_set = ['#db060b', '#c878bc', '#4260de' ]
 
 for method in methods_set:
     method_index = methods_set.index(method)
-    ax.plot(num_points_set, res_times[method_index], c=color_set[method_index], label=method)
+    ax.plot(sigma_set, res_times[method_index], c=color_set[method_index], label=method)
 
 for method in methods_set:
     method_index = methods_set.index(method)
-    plt.scatter(num_points_set, res_times[method_index], c=color_set[method_index])
+    plt.scatter(sigma_set, res_times[method_index], c=color_set[method_index])
 
 plt.legend(loc='upper left')
 
