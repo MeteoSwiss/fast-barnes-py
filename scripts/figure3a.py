@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'naive' Barnes interpolation algorithm and plots the resulting field
+Invokes the 'naive' Barnes interpolation algorithm A and plots the resulting field
 as isoline visualization on a geography with a lon-lat coordinate system.
 
 NOTE

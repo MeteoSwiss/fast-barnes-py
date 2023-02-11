@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Computes the 'convolution' Barnes interpolation algorithm with a constellation of
+Computes the 'convolution' Barnes interpolation algorithm B with a constellation of
 QFF values over Iceland that trigger an artifact when plotted with an isoline
 visualization.
 The plot shows the situation, if no quantization takes place.

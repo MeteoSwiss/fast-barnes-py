@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Module that provides the same 'convolution' algorithm as in the regular interpolation
+Module that provides the same 'convolution' algorithm B as in the regular interpolation
 module, up to the fact that the floating point number quantization degree is exposed
 in the API and thus can be freely chosen.
 
@@ -70,7 +70,7 @@ def barnes(pts, val, sigma, x0, step, size, quant_bits, num_iter=4):
 @njit
 def _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_iter):
     """ 
-    Implements algorithm 4 presented in section 4 of the paper.
+    Implements algorithm B presented in section 4 of the paper.
     In contrast to the _interpolate_convol() function found in ordinary interpolation
     module that applies a fixed quantization of 29 bits, this function allows the
     caller to freely choose the number of quantization bits.
@@ -88,7 +88,7 @@ def _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_i
     half_kernel_size = interpolation.get_half_kernel_size(sigma, step, num_iter)
     kernel_size = 2*half_kernel_size + 1
         
-    # execute algorithm 4
+    # execute algorithm B
     # convolve rows in x-direction
     h_arr = np.empty(size[1], dtype=np.float64)
     for j in range(size[0]):

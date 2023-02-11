@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'convolution' Barnes interpolation algorithm and plots the resulting field
+Invokes the 'convolution' Barnes interpolation algorithm B and plots the resulting field
 as isoline visualization on a geography with a lon-lat coordinate system.
 
 NOTE

@@ -81,7 +81,7 @@ size = (int(37.5/step), int(75.0/step))
 # read sample data from file
 obs_pts, obs_values = reader.read_csv_array('../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
 
-# the reference field is the accurate result from naive algorithm
+# the reference field is the accurate result from naive algorithm A
 print()
 print("Computing naive Barnes interpolation which is baseline for RMSE")
 naive_field = interpolation.barnes(obs_pts, obs_values.copy(), sigma, x0, step, size, method='naive')
@@ -94,7 +94,7 @@ naive_field = interpolation.barnes(obs_pts, obs_values.copy(), sigma, x0, step, 
 # array to store best measured times
 res_times = np.full((len(methods_set), len(num_iter_set)), 9999999.9, dtype=np.float64)
 
-# array to store RMSEs for convolution and optimized_convolution algorithm
+# array to store RMSEs for convolution and optimized_convolution algorithm B
 res_RMSE = np.full((len(methods_set), len(num_iter_set)), 9999999.9, dtype=np.float64)
 
 # take time measurements

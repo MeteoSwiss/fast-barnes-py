@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'optimized convolution' Barnes interpolation algorithm on sample points
+Invokes the 'optimized convolution' Barnes interpolation algorithm B on sample points
 that are previously mapped to a Lambert conformal system and plots the resulting
 field as isoline visualization on a geography with the same Lambert conformal
 coordinate system.

@@ -55,9 +55,10 @@ def barnes(pts, val, sigma, x0, step, size, method='optimized_convolution',
     method : {'optimized_convolution', 'convolution', 'radius', 'naive'}
         Designates the Barnes interpolation method to be used. The possible
         implementations that can be chosen are 'naive' for the straightforward
-        implementation, 'radius' to consider only sample points within a specific
-        radius of influence, both with an algorithmic complexity of O(N x W x H).
-        The choice 'convolution' implements algorithm 4 specified in the paper
+        implementation (algorithm A from paper), 'radius' to consider only sample
+        points within a specific radius of influence, both with an algorithmic
+        complexity of O(N x W x H).
+        The choice 'convolution' implements algorithm B specified in the paper
         and 'optimized_convolution' is its optimization by appending tail values
         to the rectangular kernel. The latter two algorithms reduce the complexity
         down to O(N + W x H).
@@ -114,7 +115,7 @@ def _normalize_values(val):
 def _inject_data(vg, wg, pts, val, x0, step, size):
     """
     Injects the observations values and weights, respectively, into the
-    corresponding fields as described by algorithm 1.
+    corresponding fields as described by algorithm B.1.
     """
     for k in range(len(pts)):
         xc = (pts[k,0]-x0[0]) / step
@@ -148,7 +149,7 @@ def _inject_data(vg, wg, pts, val, x0, step, size):
 @njit
 def _interpolate_opt_convol(pts, val, sigma, x0, step, size, num_iter):
     """ 
-    Implements algorithm 4 presented in section 4 of the paper but optimized for
+    Implements algorithm B presented in section 4 of the paper but optimized for
     a rectangular window with a tail value alpha.
     """
     offset = _normalize_values(val)
@@ -166,7 +167,7 @@ def _interpolate_opt_convol(pts, val, sigma, x0, step, size, num_iter):
         
     tail_value = get_tail_value(sigma, step, num_iter)
     
-    # execute algorithm 4
+    # execute algorithm B
     # convolve rows in x-direction
     h_arr = np.empty(size[1], dtype=np.float64)
     for j in range(size[0]):
@@ -279,7 +280,7 @@ def get_tail_value(sigma, step, num_iter):
 @njit
 def _interpolate_convol(pts, val, sigma, x0, step, size, num_iter):
     """ 
-    Implements algorithm 4 presented in section 4 of the paper.
+    Implements algorithm B presented in section 4 of the paper.
     """
     offset = _normalize_values(val)
 
@@ -294,7 +295,7 @@ def _interpolate_convol(pts, val, sigma, x0, step, size, num_iter):
     half_kernel_size = get_half_kernel_size(sigma, step, num_iter)
     kernel_size = 2*half_kernel_size + 1
         
-    # execute algorithm 4
+    # execute algorithm B
     # convolve rows in x-direction
     h_arr = np.empty(size[1], dtype=np.float64)
     for j in range(size[0]):
@@ -447,7 +448,7 @@ def _interpolate_radius(pts, val, sigma, x0, step, size, min_weight):
 
 @njit
 def _interpolate_naive(pts, val, sigma, x0, step, size):
-    """ Implements the naive algorithm to compute the Barnes interpolation. """
+    """ Implements the naive algorithm A to compute the Barnes interpolation. """
     offset = _normalize_values(val)
     
     grid_value = np.zeros(size, dtype=np.float64)

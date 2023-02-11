@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'naive' Barnes interpolation algorithm using great circle distances
+Invokes the 'naive' Barnes interpolation algorithm A using great circle distances
 (the metric on S^2) and plots the resulting field as isoline visualization on a
 geography with a lon-lat coordinate system.
 

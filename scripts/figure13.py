@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 """
-Invokes the 'optimized convolution' Barnes interpolation algorithm on sample points
+Invokes the 'optimized convolution' Barnes interpolation algorithm B on sample points
 that are previously mapped to a Lambert conformal system and bilinearly maps
 the resulting field back to a lon-lat coordinate system.
 

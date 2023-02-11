@@ -56,9 +56,10 @@ def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', n
     method : {'optimized_convolution_S2', 'naive_S2'}
         Designates the Barnes interpolation method to be used. The possible
         implementations that can be chosen are 'naive_S2' for the straightforward
-        implementation with an algorithmic complexity of O(N x W x H).
-        The choice 'optimized_convolution_S2' implements the optimized algorithm 4
-        specified in the paper by appending tail values to the rectangular kerne
+        implementation (algorithm A from the paper) with an algorithmic complexity
+        of O(N x W x H).
+        The choice 'optimized_convolution_S2' implements the optimized algorithm B
+        specified in the paper by appending tail values to the rectangular kernel.
         The latter algorithm has a reduced complexity of O(N + W x H).
         The default is 'optimized_convolution_S2'.
     num_iter : int, optional
@@ -92,7 +93,7 @@ def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', n
 @njit
 def _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, resample):
     """ 
-    Implements the optimized convolution algorithm 4 for the unit sphere S^2.
+    Implements the optimized convolution algorithm B for the unit sphere S^2.
     """
     # # the used Lambert projection
     # lambert_proj = get_lambert_proj()
@@ -206,7 +207,7 @@ def _resample(lam_field, lam_x0, x0, step, size, center_lon, n, n_inv, F, rho0):
 
 @njit
 def _interpolate_naive_S2(pts, val, sigma, x0, step, size):
-    """ Implements the naive Barnes interpolation algorithm for the unit sphere S^2. """
+    """ Implements the naive Barnes interpolation algorithm A for the unit sphere S^2. """
     offset = interpolation._normalize_values(val)
     
     grid_val = np.zeros(size, dtype=np.float64)
