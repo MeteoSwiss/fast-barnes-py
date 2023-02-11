@@ -101,7 +101,7 @@ for sigma in sigma_set:
     print()
     
     # read sample data from file
-    obs_pts, obs_values = reader.read_csv_array('../../input/obs/PressQFF_202007271200_' + str(num_points) + '.csv')
+    obs_pts, obs_values = reader.read_csv_array('input/PressQFF_202007271200_' + str(num_points) + '.csv')
     
     # definition of grid
     step = 1.0 / resolution
