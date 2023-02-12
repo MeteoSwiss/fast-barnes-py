@@ -19,4 +19,7 @@ where &delta; is the Dirac impulse function and r(.) an elementary rectangular f
 
 The module `interpolation` implements the Barnes interpolation algorithms using the Euclidean distance metric, as described in chapter 4 and 5.4 of the paper.
 The Barnes interpolation algorithms that use spherical distance metric on the sphere S^2, as outlined in chapter 5.5, are implemented im module `interpolationS2`.
-The folder `scripts` provides Python programs that reproduce the figures and tables shown in the paper.
+
+The directory `demo` provides Python programs that reproduce the figures and the tables shown in the paper.
+The corresponding scripts `figure*.py` and `timing*.py` are parameterless and can be executed directly from this directory.
+In order to do this successfully, take care to have all packages listed in the `requirements.txt` file installed.
