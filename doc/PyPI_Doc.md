@@ -27,7 +27,7 @@ input_data = np.asarray([
     [-4.01,54.80,992.1], [0.88,53.37,1002.6], [-1.69,51.86,1002.1], [-4.57,52.14,999.6], [-0.20,58.40,1001.1],
 ])
 
-lon_lat_data = input_data[:, 0:1]
+lon_lat_data = input_data[:, 0:2]
 qff_values = input_data[:, 2]
 ```
 
@@ -59,7 +59,7 @@ levels = np.arange(976, 1026, 2)
 cs = plt.contour(gridX, gridY, field, levels)
 plt.clabel(cs, levels[::2], fmt='%d', fontsize=9)
 
-plt.scatter(input_data[:, 0], input_data[:, 1], color='red', s=20, marker='.')
+plt.scatter(lon_lat_data[:, 0], lon_lat_data[:, 1], color='red', s=20, marker='.')
 
 plt.show()
 ```
