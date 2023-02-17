@@ -56,8 +56,7 @@ lam_size = (int(44.0/step), int(64.0/step))
 
 
 # read sample data from file
-obs_pts, obs_values = reader.read_csv_array('input/PressQFF_202007271200_' \
-    + str(num_points) + '.csv')
+obs_pts, obs_values = reader.read_csv_array('input/PressQFF_202007271200_' + str(num_points) + '.csv')
 
 
 # compute Barnes interpolation
