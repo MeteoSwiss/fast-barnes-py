@@ -19,7 +19,9 @@ where &delta; is the Dirac impulse function and r(.) an elementary rectangular f
 
 The module `interpolation` implements the Barnes interpolation algorithms using the Euclidean distance metric, as described in chapter 4 and 5.4 of the paper.
 The Barnes interpolation algorithms that use spherical distance metric on the sphere S^2, as outlined in chapter 5.5, are implemented im module `interpolationS2`.
+However, be aware here that the supported geographical domain and projection - as in the paper - is currently fixed to the European latitudes and Lambert conformal projection and cannot be freely chosen.
+These algorithms are also available as fast-barnes-py package on PyPI, where you also find a minimal working example.
 
-The directory `demo` provides Python programs that reproduce the figures and the tables shown in the paper.
-The corresponding scripts `figure*.py` and `timing*.py` are parameterless and can be executed directly from this directory.
-In order to do this successfully, take care to have all packages listed in the `requirements.txt` file installed.
+The directory `demo` provides Python scripts that reproduce the figures and the tables shown in the paper.
+In order to execute them you can follow [these instructions](./doc/ReproduceResults_Doc.md).
+
