@@ -33,7 +33,7 @@ qff_values = input_data[:, 2]
 
 When displayed as a scatter plot, the points defined above produce the following chart (code not shown):
 
-<img src="images\Samples.png" width="500"/>
+<img src="https://github.com/MeteoSwiss/fast-barnes-py/blob/main/doc/images/Samples.png?raw=true" width="500"/>
 
 Now the target grid has to be specified and then the data and the grid are passed with the Gaussian width parameter to the `interpolation.barnes()` method, which returns a representative gridded field. 
 
@@ -73,8 +73,8 @@ Note that due to the just-in-time compilation of the underlying code, the first 
 
 This yields the subsequent chart:
 
-<img src="images\MweIsolines.png" width="500"/>
+<img src="https://github.com/MeteoSwiss/fast-barnes-py/blob/main/doc/images/MweIsolines.png?raw=true" width="500"/>
 
 Decorating these isolines with a nice map background and labeling the sample points with their QFF values finally results in this graphics (code not shown):
 
-<img src="images\MapIsolines.png" width="500"/>
+<img src="https://github.com/MeteoSwiss/fast-barnes-py/blob/main/doc/images/MapIsolines.png?raw=true" width="500"/>
