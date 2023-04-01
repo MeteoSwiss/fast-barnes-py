@@ -1,12 +1,12 @@
 # Fast Barnes Interpolation
-This Python package provides an implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper ([preprint available at GMD](https://gmd.copernicus.org/preprints/gmd-2022-116/gmd-2022-116.pdf)).
+This Python package provides an implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
 
 Barnes interpolation is a method that is widely used in geospatial sciences like meteorology to remodel data values recorded at irregularly distributed points into a representative analytical field.
 
 Naive computation of Barnes interpolation leads to an algorithmic complexity of O(N x W x H), where N is the number of sample points and W x H the size of the underlying grid.  
 As shown in the paper, a good approximation of Barnes interpolation with a drastically reduced algorithmic complexity O(N + W x H) can be obtained by calculating a convolutional expression.
 
-### Example
+### Minimal Working Example
 
 The code below demonstrates how Barnes interpolation can be computed given a few sample points of mean sea level pressure values located over the British islands.
 
@@ -31,7 +31,11 @@ lon_lat_data = input_data[:, 0:2]
 qff_values = input_data[:, 2]
 ```
 
-The target grid has to be specified and then the data and the grid are passed with the Gaussian width parameter to the `interpolation.barnes()` method, which returns a representative gridded field. 
+When displayed as a scatter plot, the points defined above produce the following chart (code not shown):
+
+<img src="images\Samples.png" width="500"/>
+
+Now the target grid has to be specified and then the data and the grid are passed with the Gaussian width parameter to the `interpolation.barnes()` method, which returns a representative gridded field. 
 
 ```
 # definition of a 12° x 12° grid starting at 9°W / 47°N
@@ -46,12 +50,13 @@ sigma = 1.0
 field = interpolation.barnes(lon_lat_data, qff_values, sigma, x0, step, size)
 ```
 
-The resulting field can then be further processed, for instance visualized by a matplotlib contour plot.
+The resulting field can then be further processed, for instance visualized by a matplotlib contour plot
 
 ```
 # draw graphic with labeled contours and scattered sample points
 import matplotlib.pyplot as plt
 plt.figure(figsize=(5, 5))
+plt.margins(x=0, y=0)
 
 gridX = np.arange(x0[0], x0[0]+size[1]*step, step)
 gridY = np.arange(x0[1], x0[1]+size[0]*step, step)
@@ -65,3 +70,11 @@ plt.show()
 ```
 
 Note that due to the just-in-time compilation of the underlying code, the first execution of Barnes interpolation takes considerable more time than the succeeding ones.
+
+This yields the subsequent chart:
+
+<img src="images\MweIsolines.png" width="500"/>
+
+Decorating these isolines with a nice map background and labeling the sample points with their QFF values finally results in this graphics (code not shown):
+
+<img src="images\MapIsolines.png" width="500"/>

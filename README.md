@@ -1,5 +1,5 @@
 # Fast Barnes Interpolation
-This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding paper ([preprint available at GMD](https://gmd.copernicus.org/preprints/gmd-2022-116/gmd-2022-116.pdf)).
+This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
 
 Barnes interpolation is a method that is widely used in geospatial sciences like meteorology to remodel data values recorded at irregularly distributed points into a representative analytical field.
 It is defined as
@@ -25,3 +25,4 @@ These algorithms are also available as fast-barnes-py package on PyPI, where you
 The directory `demo` provides Python scripts that reproduce the figures and the tables shown in the paper.
 In order to execute them you can follow [these instructions](./doc/ReproduceResults_Doc.md).
 
+If you want to find out how to use the code, you best read through the provided [minimum working example](./doc/PyPI_Doc.md).

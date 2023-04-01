@@ -1,5 +1,5 @@
 # Reproduction of Results from Paper
-The directory `demo` provides Python scripts that reproduce the figures and the tables shown in the paper ([preprint available at GMD](https://gmd.copernicus.org/preprints/gmd-2022-116/gmd-2022-116.pdf)).
+The directory `demo` provides Python scripts that reproduce the figures and the tables shown in the [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
 In order to execute them with Python >= 3.8, you best proceed as follows:
 1) Download the zip from the `fast-barnes-py` repository provided here on GitHub and extract its contents to an empty directory. Change into this directory.
 
