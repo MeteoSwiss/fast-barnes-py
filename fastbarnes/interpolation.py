@@ -195,7 +195,7 @@ def _interpolate_opt_convol(pts, val, sigma, x0, step, size, num_iter):
     # set smaller weights to NaN with overall effect that corresponding quotient is NaN, too
     for j in range(size[0]):
         for i in range(size[1]):
-            if wg[j,i] < factor: wg[j,i] = np.NaN
+            if wg[j,i] < factor: wg[j,i] = np.nan
 
     # yet to be considered:
     # - add offset again to resulting quotient
@@ -325,7 +325,7 @@ def _interpolate_convol(pts, val, sigma, x0, step, size, num_iter):
     # set smaller weights to NaN with overall effect that corresponding quotient is NaN, too
     for j in range(size[0]):
         for i in range(size[1]):
-            if wg[j,i] < factor: wg[j,i] = np.NaN
+            if wg[j,i] < factor: wg[j,i] = np.nan
     
     # yet to be considered:
     # - add offset again to resulting quotient
@@ -439,7 +439,7 @@ def _interpolate_radius(pts, val, sigma, x0, step, size, min_weight):
             if weight_total >= 0.0022:
                 grid_value[j,i] = weighted_sum / weight_total + offset
             else:
-                grid_value[j,i] = np.NaN
+                grid_value[j,i] = np.nan
             
     return grid_value
 
@@ -470,6 +470,6 @@ def _interpolate_naive(pts, val, sigma, x0, step, size):
             if weight_total > 0.0:
                 grid_value[j,i] = weighted_sum / weight_total + offset
             else:
-                grid_value[j,i] = np.NaN
+                grid_value[j,i] = np.nan
             
     return grid_value

@@ -229,7 +229,7 @@ def _interpolate_naive_S2(pts, val, sigma, x0, step, size):
             if weight_total > 0.0:
                 grid_val[j,i] = weighted_sum / weight_total + offset
             else:
-                grid_val[j,i] = np.NaN
+                grid_val[j,i] = np.nan
             
     return grid_val
 
