@@ -9,7 +9,7 @@
 Plots the n-fold self-convolutions of a rectangle function as described in
 section 2 of the paper and show how they nicely approach a Gaussian distribution.
 
-Created on Sun May 29 20:28:02 2022
+Created on Sun May 29 2022, 20:28:02
 @author: Bruno Zürcher
 """
 
@@ -102,7 +102,7 @@ for n in n_list:
     
     # plot Gaussian and convolution figures
     plt.figure(figsize=(3.5, 5), dpi=150)
-    plt.grid(b=True)
+    plt.grid(visible=True)
     plt.xlim(-3.5, 3.5)
     plt.ylim(0.0, 0.6)
     plt.xticks([-3,-2,-1,0,1,2,3])

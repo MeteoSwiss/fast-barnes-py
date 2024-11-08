@@ -9,7 +9,7 @@
 Plots a constellation of QFF values over Iceland that produces artifacts when
 not treated with the quantization method.
 
-Created on Sun Jun  5 19:35:48 2022
+Created on Sun Jun 5 2022, 19:35:48
 @author: Bruno Zürcher
 """
 

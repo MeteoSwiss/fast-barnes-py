@@ -13,7 +13,7 @@ NOTE
 ====
 The execution time of this program takes around 20 seconds.
 
-Created on Sat May 28 14:33:59 2022
+Created on Sat May 28 2022, 14:33:59
 @author: Bruno Zürcher
 """
 
@@ -27,7 +27,7 @@ from fastbarnes import interpolation
 ###############################################################################
 
 # one of [ 'naive', 'radius', 'convolution', 'optimized_convolution' ]
-method = "convolution"
+method = 'convolution'
 
 # one of [ 0.25, 0.5, 1.0, 2.0, 4.0 ]
 sigma = 1.0
@@ -46,7 +46,7 @@ num_iter = 4
 # definition of grid
 step = 1.0 / resolution
 x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-size = (int(37.5/step), int(75.0/step))
+size = (int(75.0/step), int(37.5/step))
 
 
 # read sample data from file

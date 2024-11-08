@@ -9,7 +9,7 @@
 Plots the map scale in dependency of the latitude for a Lambert conformal
 conical projection with standard parallels at 42.5°N and 65.5°N.
 
-Created on Sat Jun  4 17:29:50 2022
+Created on Sat Jun 4 2022, 17:29:50
 @author: Bruno Zürcher
 """
 

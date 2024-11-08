@@ -15,7 +15,7 @@ NOTE
 ====
 The execution time of this program takes around 30 seconds.
 
-Created on Sat Jun  4 16:01:09 2022
+Created on Sat Jun 4 2022, 16:01:09
 @author: Bruno Zürcher
 """
 
@@ -48,11 +48,11 @@ num_iter = 4
 # definition of grid
 step = 1.0 / resolution
 x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-size = (int(37.5/step), int(75.0/step))
+size = (int(75.0/step), int(37.5/step))
 
 # the used grid in Lambert coordinate space
 lam_x0 = np.asarray([-32.0, -2.0])
-lam_size = (int(44.0/step), int(64.0/step))
+lam_size = (int(64.0/step), int(44.0/step))
 
 
 # read sample data from file
@@ -61,7 +61,7 @@ obs_pts, obs_values = reader.read_csv_array('input/PressQFF_202007271200_' + str
 
 # compute Barnes interpolation
 res_field = interpolationS2.barnes_S2(obs_pts, obs_values, sigma, x0, step, size,
-    method=method, num_iter=num_iter, resample=False)
+    method=method, num_iter=num_iter, max_dist=3.5, resample=False)
 
 # the underlying *fixed* Lambert projection
 lambert_proj = interpolationS2.get_lambert_proj()

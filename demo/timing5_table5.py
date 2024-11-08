@@ -20,12 +20,13 @@ The execution time of this program takes around 320 minutes.
 You can reduce this time by decreasing the number of sample points to 872 or 218 for
 instance.
 
-Created on Sun May 29 19:45:01 2022
+Created on Sun May 29 2022, 19:45:01
 @author: Bruno Zürcher
 """
 
 import reader
 
+from math import exp
 import numpy as np
 
 import time
@@ -73,6 +74,10 @@ print('sigma:            ', sigma)
 print('iterations:       ', num_iter)
 
 
+# compute weight that corresponds to specified max_dist
+max_dist = 3.5
+max_dist_weight = exp(-max_dist**2/2)
+
 # give some time to put computer at maximum rest (e.g. install lock screen)
 time.sleep(sleep_time)
 
@@ -94,9 +99,11 @@ for resolution in resolutions_set:
     # definition of grid
     step = 1.0 / resolution
     x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-    size = (int(37.5/step), int(75.0/step))
-    
-    
+    size = (int(75.0/step), int(37.5/step))
+
+    np_step = np.full(2, step, dtype=np.float64)
+    np_sigma = np.full(2, sigma, dtype=np.float64)
+
     # test repetition loop
     for rep in range(num_rep):
         
@@ -125,7 +132,7 @@ for resolution in resolutions_set:
                 # separately and take split times
                 start = time.perf_counter_ns()
                 res1 = interpolationS2.interpolate_opt_convol_S2_part1(obs_pts, values,
-                    sigma, x0, step, size, num_iter)
+                    np_sigma, x0, np_step, size, num_iter, max_dist_weight)
                 # execution time in seconds with accuracy of ms
                 split_time1 = ((time.perf_counter_ns() - start) // 1000000) / 1000.0
                 

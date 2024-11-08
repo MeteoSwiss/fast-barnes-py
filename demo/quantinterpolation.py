@@ -10,22 +10,23 @@ Module that provides the same 'convolution' algorithm B as in the regular interp
 module, up to the fact that the floating point number quantization degree is exposed
 in the API and thus can be freely chosen.
 
-Created on Sun Jun 05 11:31:27 2022
+Created on Sun Jun 5 2022, 11:31:27
 @author: Bruno Zürcher
 """
 
 from quantization import quant
 
-from math import pi
+from math import exp
 import numpy as np
 
 from numba import njit
 
 from fastbarnes import interpolation
 
+
 ###############################################################################
 
-def barnes(pts, val, sigma, x0, step, size, quant_bits, num_iter=4):
+def barnes(pts, val, sigma, x0, step, size, quant_bits, num_iter=4, max_dist=3.5):
     """
     Computes the 'convolution' Barnes interpolation for observation values `val` taken
     at sample points `pts` using Gaussian weights for the width parameter `sigma`.
@@ -54,6 +55,10 @@ def barnes(pts, val, sigma, x0, step, size, quant_bits, num_iter=4):
     num_iter : int, optional
         The number of performed self-convolutions of the underlying rect-kernel.
         The default is 4.
+    max_dist : float, optional
+        The maximum distance between a grid point and the next sample point for which
+        the Barnes interpolation is still calculated. Specified in sigma distances.
+        The default is 3.5, i.e. the maximum distance is 3.5 * sigma.
 
     Returns
     -------
@@ -61,14 +66,61 @@ def barnes(pts, val, sigma, x0, step, size, quant_bits, num_iter=4):
         A 2-dimensional array containing the resulting field of the performed
         Barnes interpolation.
     """
-    
-    return _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_iter)
+
+    # perform simplified argument checking
+    dim = pts.shape[1]
+
+    # since we will modify the input array val in method _normalize_values(), we store a copy of it
+    val = val.copy()
+
+    # check sigma
+    if isinstance(sigma, (list, tuple, np.ndarray)):
+        if len(sigma) != dim:
+            raise RuntimeError('specified sigma with invalid length: ' + str(len(sigma)))
+        sigma = np.asarray(sigma, dtype=np.float64)
+    else:
+        sigma = np.full(dim, sigma, dtype=np.float64)
+    # sigma is now a numpy array of length dim
+
+    # check x0
+    if isinstance(x0, (list, tuple, np.ndarray)):
+        if len(x0) != dim:
+            raise RuntimeError('specified x0 with invalid length: ' + str(len(x0)))
+        x0 = np.asarray(x0, dtype=np.float64)
+    else:
+        x0 = np.full(dim, x0, dtype=np.float64)
+    # x0 is now a numpy array of length dim
+
+    # check step
+    if isinstance(step, (list, tuple, np.ndarray)):
+        if len(step) != dim:
+            raise RuntimeError('specified step with invalid length: ' + str(len(step)))
+        step = np.asarray(step, dtype=np.float64)
+    else:
+        step = np.full(dim, step, dtype=np.float64)
+    # step is now a numpy array of length dim
+
+    # check size
+    if isinstance(size, (list, tuple, np.ndarray)):
+        if len(size) != dim:
+            raise RuntimeError('specified size with invalid length: ' + str(len(size)))
+        size = tuple(size)
+    elif dim != 1:
+        raise RuntimeError('array size should be array-like of length: ' + str(dim))
+    else:
+        size = (size, )
+    # size is now a tuple of length dim
+
+    # compute weight that corresponds to specified max_dist
+    max_dist_weight = exp(-max_dist**2/2)
+
+    return _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_iter, max_dist_weight)
     
 
 #------------------------------------------------------------------------------
 
 @njit
-def _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_iter):
+def _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_iter, max_dist_weight):
     """ 
     Implements algorithm B presented in section 4 of the paper.
     In contrast to the _interpolate_convol() function found in ordinary interpolation
@@ -78,54 +130,26 @@ def _interpolate_quant_convol(pts, val, sigma, x0, step, size, quant_bits, num_i
     offset = interpolation._normalize_values(val)
 
     # the grid fields to store the convolved values and weights
-    vg = np.zeros(size, dtype=np.float64)
-    wg = np.zeros(size, dtype=np.float64)
-    
+    rsize = size[::-1]
+    vg = np.zeros(rsize, dtype=np.float64)
+    wg = np.zeros(rsize, dtype=np.float64)
+
     # inject obs values into grid
-    interpolation._inject_data(vg, wg, pts, val, x0, step, size)
-    
+    interpolation._inject_data_2d(vg, wg, pts, val, x0, step, size)
+
     # prepare convolution
-    half_kernel_size = interpolation.get_half_kernel_size(sigma, step, num_iter)
+    half_kernel_size = interpolation._get_half_kernel_size(sigma, step, num_iter)
     kernel_size = 2*half_kernel_size + 1
-        
+
     # execute algorithm B
-    # convolve rows in x-direction
-    h_arr = np.empty(size[1], dtype=np.float64)
-    for j in range(size[0]):
-        # convolve row values
-        vg[j,:] = interpolation._accumulate_array(vg[j,:].copy(), h_arr, size[1], kernel_size, num_iter)
-            
-        # convolve row weights
-        wg[j,:] = interpolation._accumulate_array(wg[j,:].copy(), h_arr, size[1], kernel_size, num_iter)
-        
-    # convolve columns in y- direction
-    h_arr = np.empty(size[0], dtype=np.float64)
-    for i in range(size[1]):
-        # convolve column values
-        vg[:,i] = interpolation._accumulate_array(vg[:,i].copy(), h_arr, size[0], kernel_size, num_iter)
-        
-        # convolve column weights
-        wg[:,i] = interpolation._accumulate_array(wg[:,i].copy(), h_arr, size[0], kernel_size, num_iter)
-        
-    
-    # compute limit wgtArr value for which weight > 0.0022, i.e. grid points with greater distance
-    #   than 3.5*sigma will evaluate to NaN
-    # since we dropped common factors in our computation, we have to revert their cancellation in the
-    #   following computation
-    sigma_eff = interpolation.get_sigma_effective(sigma, step, num_iter)
-    factor = float(kernel_size) ** (2*num_iter) * (step/sigma_eff) ** 2 / 2 / pi * 0.0022
-    
-    # set smaller weights to NaN with overall effect that corresponding quotient is NaN, too
-    for j in range(size[0]):
-        for i in range(size[1]):
-            if wg[j,i] < factor: wg[j,i] = np.NaN
-    
+    interpolation._convolve_2d(vg, wg, sigma, step, size, kernel_size, num_iter, max_dist_weight)
+
     # yet to be considered:
     # - add offset again to resulting quotient
     vg = vg / wg + offset
-    
+
     ### HERE DIFFERS IMPLEMENTATION ###
     # - and apply quantization operation: remove specified number of quantization bits
     quant(vg, quant_bits)
-    
+
     return vg

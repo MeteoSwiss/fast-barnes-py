@@ -18,7 +18,7 @@ NOTE
 The execution time of this program takes around 6 minutes.
 You can reduce this time by decreasing the resolution to 16.0 or 8.0 for instance.
 
-Created on Sun May 29 20:03:40 2022
+Created on Sun May 29 2022, 20:03:40
 @author: Bruno Zürcher
 """
 

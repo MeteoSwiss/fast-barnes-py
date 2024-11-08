@@ -9,7 +9,7 @@
 Module that implements a well performing bit quantization algorithm by using
 the Numba just-in-time compiler.
 
-Created on Sat Jun  4 21:59:37 2022
+Created on Sat Jun 4 2022, 21:59:37
 @author: Bruno Zürcher
 """
 

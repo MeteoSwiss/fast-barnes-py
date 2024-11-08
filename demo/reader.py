@@ -8,7 +8,7 @@
 """
 Module providing data reader functionality.
 
-Created on Sat Jan 23 16:06:11 2021
+Created on Sat Jan 23 2022, 16:06:11
 @author: Bruno Zürcher
 """
 

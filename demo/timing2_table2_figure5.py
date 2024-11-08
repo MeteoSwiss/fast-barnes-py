@@ -18,7 +18,7 @@ The execution time of this program takes around 140 minutes.
 You can reduce this time by decreasing the number of sample points to 872 or 218
 for instance.
 
-Created on Sat Jun 11 16:32:15 2022
+Created on Sat Jun 11 2022, 16:32:15
 @author: Bruno Zürcher
 """
 

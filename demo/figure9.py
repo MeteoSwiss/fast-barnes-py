@@ -14,7 +14,7 @@ NOTE
 ====
 The execution time of this program takes around 2 minutes.
 
-Created on Sun Jun 5 19:19:44 2022
+Created on Sun Jun 5 2022, 19:19:44
 @author: Bruno Zürcher
 """
 
@@ -74,7 +74,7 @@ editIm = ImageDraw.Draw(destIm)
 # definition of grid
 step = 1.0 / resolution
 x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-size = (int(37.5/step), int(75.0/step))
+size = (int(75.0/step), int(37.5/step))
 
 
 # read sample data from file

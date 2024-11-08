@@ -6,9 +6,9 @@
 #------------------------------------------------------------------------------
 
 """
-Module that provides functions to compute the root mean square error (RMSE).
+Module that provides functions to compute the root-mean-square error (RMSE).
 
-Created on Sat Jun  4 09:56:19 2022
+Created on Sat Jun 4 2022, 09:56:19
 @author: Bruno Zürcher
 """
 

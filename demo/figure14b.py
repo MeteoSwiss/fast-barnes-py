@@ -11,7 +11,7 @@ QFF values over Iceland that trigger an artifact when plotted with an isoline
 visualization.
 The plot shows the situation, if no quantization takes place.
 
-Created on Sun Jun  5 19:51:02 2022
+Created on Sun Jun 5 2022, 19:51:02
 @author: Bruno Zürcher
 """
 
@@ -43,7 +43,7 @@ quant_bits = 0
 # definition of grid
 step = 1.0 / resolution
 x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-size = (int(37.5/step), int(75.0/step))
+size = (int(75.0/step), int(37.5/step))
 
 
 # read sample data from file

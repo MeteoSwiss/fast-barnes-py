@@ -16,7 +16,7 @@ The execution time of this program takes around 20 seconds.
 You can reduce this time by decreasing for instance the resolution or the number
 of used sample points.
 
-Created on Sun Jun  5 14:51:40 2022
+Created on Sun Jun 5 2022, 14:51:40
 @author: Bruno Zürcher
 """
 
@@ -49,7 +49,7 @@ num_iter = 4
 # definition of grid
 step = 1.0 / resolution
 x0 = np.asarray([-26.0+step, 34.5], dtype=np.float64)
-size = (int(37.5/step), int(75.0/step))
+size = (int(75.0/step), int(37.5/step))
 
 
 # read sample data from file
@@ -58,7 +58,7 @@ obs_pts, obs_values = reader.read_csv_array('input/PressQFF_202007271200_' + str
 
 # compute Barnes interpolation
 res_field = interpolationS2.barnes_S2(obs_pts, obs_values, sigma, x0, step, size,
-    method=method, num_iter=num_iter)
+    method=method, num_iter=num_iter, max_dist=3.5, resample=True)
 
 
 # display isoline plot of interpolation

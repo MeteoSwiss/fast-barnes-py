@@ -9,7 +9,7 @@
 Module that contains different auxiliary plot functions that were used to
 visualize the results presented in the paper.
 
-Created on Sat Jan 23 14:51:40 2021
+Created on Sat Jan 23 2022, 14:51:40
 @author: Bruno Zürcher
 """
 
@@ -33,6 +33,7 @@ import numpy as np
 
 from fastbarnes.util import lambert_conformal
 
+
 ###############################################################################
 
 def plot_lat_lon_map(data, x0, step, size, scatter_pts=None, alpha_channel=True,
@@ -42,10 +43,10 @@ def plot_lat_lon_map(data, x0, step, size, scatter_pts=None, alpha_channel=True,
     Europe geography background using a lon-lat coordinate system.
     """
     # create mesh grid
-    gridX = np.arange(0.0, size[1], 1.0)
+    gridX = np.arange(0.0, size[0], 1.0)
     gridX = gridX*step + x0[0]
     # y-axis of grid
-    gridY = np.arange(0.0, size[0], 1.0)
+    gridY = np.arange(0.0, size[1], 1.0)
     gridY = gridY*step + x0[1]
     # arrays holding x- and y-coordinates of grid points
     X, Y = np.meshgrid(gridX, gridY)
@@ -103,10 +104,10 @@ def plot_Lambert_map(data, lam_x0, step, lam_size, lam_proj, scatter_pts=None,
     Europe geography background using a Lambert conformal coordinate system.
     """
     # create mesh grid
-    gridX = np.arange(0.0, lam_size[1], 1.0)
+    gridX = np.arange(0.0, lam_size[0], 1.0)
     gridX = gridX*step + lam_x0[0]
     # y-axis of grid
-    gridY = np.arange(0.0, lam_size[0], 1.0)
+    gridY = np.arange(0.0, lam_size[1], 1.0)
     gridY = gridY*step + lam_x0[1]
     # arrays holding x- and y-coordinates of grid points in Lambert space
     X, Y = np.meshgrid(gridX, gridY)
@@ -183,10 +184,10 @@ def image_lat_lon_map(data, x0, step, size, scatter_pts=None, alpha_channel=True
     of showing a plot of the result.
     """
     # create mesh grid
-    gridX = np.arange(0.0, size[1], 1.0)
+    gridX = np.arange(0.0, size[0], 1.0)
     gridX = gridX*step + x0[0]
     # y-axis of grid
-    gridY = np.arange(0.0, size[0], 1.0)
+    gridY = np.arange(0.0, size[1], 1.0)
     gridY = gridY*step + x0[1]
     # arrays holding x- and y-coordinates of grid points
     X, Y = np.meshgrid(gridX, gridY)
@@ -253,10 +254,10 @@ def plot_Iceland_map(data, x0, step, size, scatter_pts=None, alpha_channel=True,
     Iceland geography background using a lon-lat coordinate system.
     """
     # create mesh grid
-    gridX = np.arange(0.0, size[1], 1.0)
+    gridX = np.arange(0.0, size[0], 1.0)
     gridX = gridX*step + x0[0]
     # y-axis of grid
-    gridY = np.arange(0.0, size[0], 1.0)
+    gridY = np.arange(0.0, size[1], 1.0)
     gridY = gridY*step + x0[1]
     # arrays holding x- and y-coordinates of grid points
     X, Y = np.meshgrid(gridX, gridY)

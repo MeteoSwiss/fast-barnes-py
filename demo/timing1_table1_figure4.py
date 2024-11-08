@@ -17,7 +17,7 @@ NOTE - THIS IS A ANNOYINGLY SLOW TEST
 The execution time of this program takes around 40 minutes.
 You can reduce this time by decreasing the resolution to 16.0 or 8.0 for instance.
 
-Created on Sun May 29 17:01:51 2022
+Created on Sun May 29 2022, 17:01:51
 @author: Bruno Zürcher
 """
 
