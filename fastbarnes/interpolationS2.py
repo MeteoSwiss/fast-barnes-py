@@ -14,11 +14,11 @@ which is sometimes not straightforward to read at a first glance. Allocated
 memory is as far as possible reused in order to reduce the workload imposed
 on the garbage collector.
 
-Created on Sat May 14 20:49:17 2022
+Created on Sat May 14 2022, 20:49:17
 @author: Bruno Zürcher
 """
 
-from math import pi
+from math import exp, pi
 import numpy as np
 
 from numba import njit
@@ -29,7 +29,7 @@ from fastbarnes.util import lambert_conformal
 
 ###############################################################################
 
-def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', num_iter=4, resample=True):
+def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', num_iter=4, max_dist=3.5, resample=True):
     """
     Computes the Barnes interpolation for observation values `val` taken at sample
     points `pts` using Gaussian weights for the width parameter `sigma`.
@@ -66,6 +66,10 @@ def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', n
         The number of performed self-convolutions of the underlying rect-kernel.
         Applies only if method is 'optimized_convolution_S2'.
         The default is 4.
+    max_dist : float, optional
+        The maximum distance between a grid point and the next sample point for which
+        the Barnes interpolation is still calculated. Specified in sigma distances.
+        The default is 3.5, i.e. the maximum distance is 3.5 * sigma.
     resample : bool, optional
         Specifies whether to resample Lambert grid field to lonlat grid.
         Applies only if method is 'optimized_convolution_S2'.
@@ -77,9 +81,55 @@ def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', n
         A 2-dimensional array containing the resulting field of the performed
         Barnes interpolation.
     """    
+    # perform simplified argument checking
+    dim = pts.shape[1]
+
+    # since we will modify the input array val in method _normalize_values(), we store a copy of it
+    val = val.copy()
+
+    # check sigma
+    if isinstance(sigma, (list, tuple, np.ndarray)):
+        if len(sigma) != dim:
+            raise RuntimeError('specified sigma with invalid length: ' + str(len(sigma)))
+        sigma = np.asarray(sigma, dtype=np.float64)
+    else:
+        sigma = np.full(dim, sigma, dtype=np.float64)
+    # sigma is now a numpy array of length dim
+
+    # check x0
+    if isinstance(x0, (list, tuple, np.ndarray)):
+        if len(x0) != dim:
+            raise RuntimeError('specified x0 with invalid length: ' + str(len(x0)))
+        x0 = np.asarray(x0, dtype=np.float64)
+    else:
+        x0 = np.full(dim, x0, dtype=np.float64)
+    # x0 is now a numpy array of length dim
+
+    # check step
+    if isinstance(step, (list, tuple, np.ndarray)):
+        if len(step) != dim:
+            raise RuntimeError('specified step with invalid length: ' + str(len(step)))
+        step = np.asarray(step, dtype=np.float64)
+    else:
+        step = np.full(dim, step, dtype=np.float64)
+    # step is now a numpy array of length dim
+
+    # check size
+    if isinstance(size, (list, tuple, np.ndarray)):
+        if len(size) != dim:
+            raise RuntimeError('specified size with invalid length: ' + str(len(size)))
+        size = tuple(size)
+    elif dim != 1:
+        raise RuntimeError('array size should be array-like of length: ' + str(dim))
+    else:
+        size = (size, )
+    # size is now a tuple of length dim
+
+    # compute weight that corresponds to specified max_dist
+    max_dist_weight = exp(-max_dist**2/2)
 
     if method == 'optimized_convolution_S2':
-        return _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, resample)
+        return _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, max_dist_weight, resample)
         
     elif method == 'naive_S2':
         return _interpolate_naive_S2(pts, val, sigma, x0, step, size)
@@ -91,7 +141,7 @@ def barnes_S2(pts, val, sigma, x0, step, size, method='optimized_convolution', n
 # -----------------------------------------------------------------------------
 
 @njit
-def _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, resample):
+def _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, max_dist_weight, resample):
     """ 
     Implements the optimized convolution algorithm B for the unit sphere S^2.
     """
@@ -118,7 +168,7 @@ def _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, resamp
     # split commented code above in two separately 'measurable' sub-routines
     
     # the convolution part taking place in Lambert space
-    res1 = interpolate_opt_convol_S2_part1(pts, val, sigma, x0, step, size, num_iter)
+    res1 = interpolate_opt_convol_S2_part1(pts, val, sigma, x0, step, size, num_iter, max_dist_weight)
     
     # the resampling part that performs back-projection from Lambert to lonlat space
     if resample:
@@ -128,20 +178,20 @@ def _interpolate_opt_convol_S2(pts, val, sigma, x0, step, size, num_iter, resamp
 
 
 @njit
-def interpolate_opt_convol_S2_part1(pts, val, sigma, x0, step, size, num_iter):
+def interpolate_opt_convol_S2_part1(pts, val, sigma, x0, step, size, num_iter, max_dist_weight):
     """ The convolution part of _interpolate_opt_convol_S2(), allowing to measure split times. """
     # the used Lambert projection
     lambert_proj = get_lambert_proj()
     
     # the *fixed* grid in Lambert coordinate space
     lam_x0 = np.asarray([-32.0, -2.0])
-    lam_size = (int(44.0/step), int(64.0/step))
+    lam_size = (int(64.0/step[0]), int(44.0/step[1]))
     
     # map lonlat sample point coordinates to Lambert coordinate space
     lam_pts = lambert_conformal.to_map(pts, pts.copy(), *lambert_proj)
     
     # call ordinary 'optimized_convolution' algorithm
-    lam_field = interpolation._interpolate_opt_convol(lam_pts, val, sigma, lam_x0, step, lam_size, num_iter)
+    lam_field = interpolation._interpolate_opt_convol(lam_pts, val, sigma, lam_x0, step, lam_size, num_iter, max_dist_weight)
 
     return (lam_field, lam_x0, x0, step, size, lambert_proj)
 
@@ -160,32 +210,33 @@ def get_lambert_proj():
     
 @njit
 def _resample(lam_field, lam_x0, x0, step, size, center_lon, n, n_inv, F, rho0):
-    """ Resamples the Lambert grdi field to the specified lonlat grid. """
+    """ Resamples the Lambert grid field to the specified lonlat grid. """
     # x-coordinate in lon-lat grid is constant over all grid lines
-    geox = np.empty(size[1], dtype=np.float64)
-    for i in range(size[1]):
-        geox[i] = x0[0] + i*step
+    geox = np.empty(size[0], dtype=np.float64)
+    for i in range(size[0]):
+        geox[i] = x0[0] + i*step[0]
         
     # memory for coordinates in Lambert space
-    mapx = np.empty(size[1], dtype=np.float64)
-    mapy = np.empty(size[1], dtype=np.float64)
+    mapx = np.empty(size[0], dtype=np.float64)
+    mapy = np.empty(size[0], dtype=np.float64)
     
     # memory for the corresponding Lambert grid indices 
-    indx = np.empty(size[1], dtype=np.int32)
-    indy = np.empty(size[1], dtype=np.int32)
+    indx = np.empty(size[0], dtype=np.int32)
+    indy = np.empty(size[0], dtype=np.int32)
     
     # memory for the resulting field in lonlat space
-    res_field = np.empty(size, dtype=np.float32)
+    rsize = size[::-1]
+    res_field = np.empty(rsize, dtype=np.float32)
     
     # for each line in lonlat grid 
-    for j in range(size[0]):
+    for j in range(size[1]):
         # compute corresponding locations in Lambert space
-        lambert_conformal.to_map2(geox, j*step + x0[1], mapx, mapy, center_lon, n, n_inv, F, rho0)
+        lambert_conformal.to_map2(geox, j*step[1] + x0[1], mapx, mapy, center_lon, n, n_inv, F, rho0)
         # compute corresponding Lambert grid indices
         mapx -= lam_x0[0]
-        mapx /= step
+        mapx /= step[0]
         mapy -= lam_x0[1]
-        mapy /= step
+        mapy /= step[1]
         # the corresponding 'i,j'-integer indices of the lower left grid point
         indx[:] = mapx.astype(np.int32)
         indy[:] = mapy.astype(np.int32)
@@ -194,7 +245,7 @@ def _resample(lam_field, lam_x0, x0, step, size, center_lon, n, n_inv, F, rho0):
         mapy -= indy    # contains now the weights
         
         # compute bilinear interpolation of the 4 neighboring grid point values 
-        for i in range(size[1]):
+        for i in range(size[0]):
             res_field[j,i] = (1.0-mapy[i])*(1.0-mapx[i])*lam_field[indy[i],indx[i]] + \
                 mapy[i]*(1.0-mapx[i])*lam_field[indy[i]+1,indx[i]] + \
                 mapy[i]*mapx[i]*lam_field[indy[i]+1,indx[i]+1] + \
@@ -209,28 +260,30 @@ def _resample(lam_field, lam_x0, x0, step, size, center_lon, n, n_inv, F, rho0):
 def _interpolate_naive_S2(pts, val, sigma, x0, step, size):
     """ Implements the naive Barnes interpolation algorithm A for the unit sphere S^2. """
     offset = interpolation._normalize_values(val)
-    
-    grid_val = np.zeros(size, dtype=np.float64)
-    
+
+    # the grid field to store the interpolated values - reverse grid dimensions
+    rsize = size[::-1]
+    grid_val = np.zeros(rsize, dtype=np.float64)
+
     scale = 2*sigma**2
-    for j in range(size[0]):
+    for j in range(size[1]):
         # compute y-coordinate of grid point
-        yc = x0[1] + j*step
-        for i in range(size[1]):
+        yc = x0[1] + j*step[1]
+        for i in range(size[0]):
             # compute x-coordinate of grid point
-            xc = x0[0] + i*step
-            
+            xc = x0[0] + i*step[0]
+
             # use numpy to directly compute numerator and denominator of equ. (1)
             dist = _dist_S2(xc, yc, pts[:,0], pts[:,1])
-            weight = np.exp(-dist*dist/scale)
+            weight = np.exp(-dist*dist/scale[0])        # assuming scale is equal in x and y direction
             weighted_sum = np.dot(weight, val)
             weight_total = np.sum(weight)
-            
+
             if weight_total > 0.0:
                 grid_val[j,i] = weighted_sum / weight_total + offset
             else:
-                grid_val[j,i] = np.NaN
-            
+                grid_val[j,i] = np.nan
+
     return grid_val
 
 
