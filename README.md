@@ -40,6 +40,7 @@ The recorded execution times for the pure interpolation tasks were
 The detail views of the isoline visualizations of the respective Barnes interpolation results agree to a very high degree:
 
 <img src="doc/images/NaiveBarnesDetail.png"> &nbsp; &nbsp; <img src="doc/images/ConvBarnesDetail.png">
+
 The left image depicts the isoline visualization for the naive approach, the right image that for the convolutional, fast approach.
 
 &nbsp;
