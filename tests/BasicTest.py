@@ -146,3 +146,7 @@ class BasicTest(unittest.TestCase):
             except RuntimeError:
                 # do nothing
                 continue
+
+
+if __name__ == '__main__':
+    unittest.main()
