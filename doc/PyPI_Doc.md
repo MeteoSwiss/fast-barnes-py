@@ -2,8 +2,9 @@
 
 # Fast Barnes Interpolation
 
-This Python package provides an implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).  
-In addition to Barnes interpolation for 2-dimensional applications, this package now also supports the interpolation of 1-dimensional and 3-dimensional data.
+This Python package provides an implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
+
+In addition to Barnes interpolation for 2-dimensional applications, this package now also supports Barnes interpolation of 1-dimensional and 3-dimensional data.
 
 &nbsp;
 
@@ -42,7 +43,7 @@ The detail views of the isoline visualizations of the respective Barnes interpol
 
 <img src="https://github.com/MeteoSwiss/fast-barnes-py/blob/main/doc/images/NaiveBarnesDetail.png?raw=true"> &nbsp; &nbsp; <img src="https://github.com/MeteoSwiss/fast-barnes-py/blob/main/doc/images/ConvBarnesDetail.png?raw=true">
 
-The left image depicts the isoline visualization for the naive approach, the right image that for the convolutional, fast approach.
+The first image depicts the isoline visualization for the naive approach, the second image that for the convolutional, fast approach.
 
 &nbsp;
 

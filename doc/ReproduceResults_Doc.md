@@ -1,7 +1,9 @@
+<img src="images/InterpolationStrip.png"/>
+
 # Reproduction of Results from Paper
 The directory `demo` provides Python scripts that reproduce the figures and the tables shown in the [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
-In order to execute them with Python >= 3.8, you best proceed as follows:
-1) Download the zip from the `fast-barnes-py` repository provided here on GitHub and extract its contents to an empty directory. Change into this directory.
+In order to execute them with Python < 3.13 >= 3.9, you best proceed as follows:
+1) Download the latest zip from the `fast-barnes-py` repository provided here on GitHub by clicking 'Releases' right to the list of files and extract its contents to an empty directory. Change into this directory.
 
 
 2) Optional step: create a virtual Python environment inside this directory and activate it.
@@ -14,7 +16,7 @@ In order to execute them with Python >= 3.8, you best proceed as follows:
    In doing so also numpy, scipy and numba will be installed.
 
 
-4) The visualization of the figures requires the installation of further packages (matplotlib, basemap and Pillow) listed in requirements.txt. Execute therefore also
+4) The visualization of the figures requires the installation of further packages (matplotlib, basemap and Pillow) listed in requirements.txt. Therefore, execute also
    ```
    pip install -r requirements.txt
    ```
@@ -36,5 +38,5 @@ Scripts with relatively fast execution times of around 1 minute and below are gi
 
 ### Potentially Deviating Plot Diagrams
 Depending on the used CPUs and the possibly slightly modified test setups described above, the time measurements might deviate from the results in the paper.
-This can also be reflected in differing plot diagrams, in particular in axes with unsuitable axis ranges.
+This can also be reflected in differing plot diagrams, in particular in axes with unsuitable axis ranges.  
 

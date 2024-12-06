@@ -2,8 +2,9 @@
 
 # Fast Barnes Interpolation
 
-This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).  
-In addition to Barnes interpolation for 2-dimensional applications, this implementation now also supports the interpolation of 1-dimensional and 3-dimensional data.
+This repository provides a Python implementation of the formal algorithms for fast Barnes interpolation as presented in the corresponding [paper published in the GMD journal](https://gmd.copernicus.org/articles/16/1697/2023/gmd-16-1697-2023.pdf).
+
+In addition to Barnes interpolation for 2-dimensional applications, this implementation now also supports Barnes interpolation of 1-dimensional and 3-dimensional data.
 
 &nbsp;
 
@@ -42,7 +43,7 @@ The detail views of the isoline visualizations of the respective Barnes interpol
 
 <img src="doc/images/NaiveBarnesDetail.png"> &nbsp; &nbsp; <img src="doc/images/ConvBarnesDetail.png">
 
-The left image depicts the isoline visualization for the naive approach, the right image that for the convolutional, fast approach.
+The first image depicts the isoline visualization for the naive approach, the second image that for the convolutional, fast approach.
 
 &nbsp;
 

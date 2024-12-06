@@ -5,7 +5,7 @@
 These are the release notes for the `fast-barnes-py` Python library.
 
 
-## 2.0 Release (2024-11-15)
+## 2.0 Release (2024-12-06)
 
 ### New Features
 
